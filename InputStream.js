@@ -1,7 +1,6 @@
 class InputStream {
     constructor(input) {
-        this._input = input;
-        this._length = input.length;
+        this._input = input.split(/[\s\t]+/).map(w => w.toLowerCase());
         this._cursor = 0;
     }
 
@@ -14,11 +13,11 @@ class InputStream {
     }
 
     eof() {
-        return this._cursor == this._length;
+        return this._cursor == this._input.length;
     }
 
     err(msg) {
-        throw new Error(msg);
+        throw new Error(`${msg} (pos ${this._cursor})`);
     }
 }
 
