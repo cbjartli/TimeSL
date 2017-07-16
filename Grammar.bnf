@@ -3,6 +3,7 @@
 
 <indefdate> := <month> <daynum> 
             | <namedindefdate>
+            | <ord> day of <month>
             | <day>
             | <day> + <daynum>
 
