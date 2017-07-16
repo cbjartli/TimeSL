@@ -1,10 +1,53 @@
-DAY := MONTHDATE | MONTHDATE YEAR | DAYCONST | RELSPEC DAY
-MONTHDATE := MONTH INT
-YEAR := INT | INT "AD" | INT "BC"
-DAYCONST := "Boxing Day" | "Groundhog Day"
-RELSPEC := INTERVAL DIR | INTERVAL DIR
-INTERVAL := INT INTERVALSPEC
-DIR := "before" | "after"
-INTERVALSPEC := "day" | "days"
+<expr>      := <indefdate> 
+             | <defdate>
 
+<indefdate> := <month> <daynum> 
+            | <namedindefdate>
+            | <day>
+            | <day> + <daynum>
 
+<date>      := <indefdate>
+            | <indefdate> <year>
+            | <dayspec> <month> 
+            | next <indefdate>
+            | last <indefdate>
+            | this <indefdate>
+            | <int> <delta> before <date> 
+            | <int>< <delta> after <date>
+            | <nameddate>
+            | <ord> day of <year>
+            | <ord> day of <ord> week of <year>
+
+<year>      := <int> 
+            | <int> <era>
+
+<era>       := bc
+            | ad
+            | bce 
+            | ce
+
+<month>     := january
+            | february
+            | march
+            | april
+            | may
+            | june
+            | july
+            | august
+            | september 
+            | october
+            | november
+            | december
+
+<day>       := monday
+            | tuesday
+            | wednesday
+            | thursday
+            | friday
+            | saturday
+            | sunday
+
+<ord>       := <int>st 
+            | <int>nd
+            | <int>rd
+            | <int>th
