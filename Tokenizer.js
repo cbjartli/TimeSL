@@ -5,6 +5,8 @@ const GenerateKeywords = require('./Keywords.js');
 class Tokenizer {
     constructor(input) {
         this._tokens = Tokenizer.tokenize(input);
+        this._cursor = 0;
+        this.eof = { type: 'eof', val: 'eof' };
     }
 
     static tokenize(input) {
@@ -36,6 +38,19 @@ class Tokenizer {
         }
     
         return tokens;
+    }
+
+    peek(n) {
+        n = n || 0;
+        return this._tokens[this._cursor + n] || this.eof;
+    }
+
+    next() {
+        return this._cursor < this._tokens.length ? this._tokens[this._cursor++] : this.eof;
+    }
+
+    eof() {
+        return this._cursor == this._tokens.length;
     }
 }
 
