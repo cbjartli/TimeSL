@@ -1,11 +1,4 @@
-<expr>           ::= <indefdate>
-                  | <defdate>
-
-<indefdate>      ::= <month> <daynum>
-                 | <namedindefdate>
-                 | <numdaymod> <month>
-                 | <day>
-                 | <day> + <daynum>
+<expr>           ::= <date>
 
 <date>           ::= <indefdate>
                  | <indefdate> <year>
@@ -14,6 +7,12 @@
                  | <int>< <delta> "after" <date>
                  | <nameddate>
                  | <numdaymod> <year>
+
+<indefdate>      ::= <month> <daynum>
+                 | <namedindefdate>
+                 | <numdaymod> <month>
+                 | <day>
+                 | <day> + <daynum>
 
 <seqmod>         ::= "next"
                  | "last"
@@ -62,6 +61,7 @@
                  | ""
 
 <daynum>         ::= <int>
+                 | <var>
 
 <namedindefdate> ::= "Boxing Day" 
                  | "Christmas Eve" 
