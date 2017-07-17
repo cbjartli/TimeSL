@@ -17,16 +17,21 @@ class Tokenizer {
             let word = wordstream.next();
     
             if (word in lookupset) {
-                if ("$type" in lookupset[word]) {
-                    tokens.push({type: lookupset[word].$type, val: lookupset[word].$val});
+                if ("$val" in lookupset[word]) {
+                    tokens.push({type: 'kw', val: lookupset[word].$val});
                     lookupset = keywords;
                 } else {
                     lookupset = lookupset[word];
                 }
-            } else if (word.match(/[0-9]+/)) {
-                tokens.push({type: "int", val: parseInt(word)})
+            } else if (word.match(/^[0-9]+(st|nd|rd|th)$/)) {
+                tokens.push({type: 'ord', val: parseInt(word.substring(0, word.length - 2)) });
+            } else if (word.match(/^[0-9]+$/)) {
+                tokens.push({type: 'int', val: parseInt(word)});
+            } else if (word.match(/^{[a-zA-Z0-9]+}$/)) {
+                tokens.push({type: 'var', val: word.substring(1, word.length - 1)});
+            } else if (word == '') {
             } else {
-                wordstream.err("Unable to tokenize")
+                wordstream.err("Unable to tokenize @ " + word)
             }
         }
     
