@@ -1,54 +1,57 @@
-<expr>      := <indefdate> 
+<expr>      ::= <indefdate> 
              | <defdate>
 
-<indefdate> := <month> <daynum> 
+<indefdate> ::= <month> <daynum> 
             | <namedindefdate>
-            | <ord> day of <month>
+            | <optdet> <ord> "day" "of" <month>
             | <day>
             | <day> + <daynum>
 
-<date>      := <indefdate>
+<date>      ::= <indefdate>
             | <indefdate> <year>
             | <dayspec> <month> 
-            | next <indefdate>
-            | last <indefdate>
-            | this <indefdate>
-            | <int> <delta> before <date> 
-            | <int>< <delta> after <date>
+            | "next" <indefdate>
+            | "last" <indefdate>
+            | "this" <indefdate>
+            | <int> <delta> "before" <date> 
+            | <int>< <delta> "after" <date>
             | <nameddate>
-            | <ord> day of <year>
-            | <ord> day of <ord> week of <year>
+            | <optdet> <ord> "day" "of" <year>
+            | <optdet> <ord> "day" "of" <optdet> <ord> "week" "of" <year>
 
-<year>      := <int> 
+<year>      ::= <int> 
             | <int> <era>
 
-<era>       := bc
-            | ad
-            | bce 
-            | ce
+<era>       ::= "bc"
+            | "ad"
+            | "bce" 
+            | "ce"
 
-<month>     := january
-            | february
-            | march
-            | april
-            | may
-            | june
-            | july
-            | august
-            | september 
-            | october
-            | november
-            | december
+<month>     ::= "january"
+            | "february"
+            | "march"
+            | "april"
+            | "may"
+            | "june"
+            | "july"
+            | "august"
+            | "september" 
+            | "october"
+            | "november"
+            | "december"
 
-<day>       := monday
-            | tuesday
-            | wednesday
-            | thursday
-            | friday
-            | saturday
-            | sunday
+<day>       ::= "monday"
+            | "tuesday"
+            | "wednesday"
+            | "thursday"
+            | "friday"
+            | "saturday"
+            | "sunday"
 
-<ord>       := <int>st 
-            | <int>nd
-            | <int>rd
-            | <int>th
+<ord>       ::= <int>"st"
+            | <int>"nd"
+            | <int>"rd"
+            | <int>"th"
+
+<optdet>    ::= "the"
+            | ""
