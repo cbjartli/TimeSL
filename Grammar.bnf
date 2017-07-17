@@ -1,57 +1,72 @@
-<expr>      ::= <indefdate> 
-             | <defdate>
+<expr>           ::= <indefdate>
+                  | <defdate>
 
-<indefdate> ::= <month> <daynum> 
-            | <namedindefdate>
-            | <optdet> <ord> "day" "of" <month>
-            | <day>
-            | <day> + <daynum>
+<indefdate>      ::= <month> <daynum>
+                 | <namedindefdate>
+                 | <numdaymod> <month>
+                 | <day>
+                 | <day> + <daynum>
 
-<date>      ::= <indefdate>
-            | <indefdate> <year>
-            | <dayspec> <month> 
-            | "next" <indefdate>
-            | "last" <indefdate>
-            | "this" <indefdate>
-            | <int> <delta> "before" <date> 
-            | <int>< <delta> "after" <date>
-            | <nameddate>
-            | <optdet> <ord> "day" "of" <year>
-            | <optdet> <ord> "day" "of" <optdet> <ord> "week" "of" <year>
+<date>           ::= <indefdate>
+                 | <indefdate> <year>
+                 | <seqmod> <indefdate>
+                 | <int> <delta> "before" <date>
+                 | <int>< <delta> "after" <date>
+                 | <nameddate>
+                 | <numdaymod> <year>
 
-<year>      ::= <int> 
-            | <int> <era>
+<seqmod>         ::= "next"
+                 | "last"
+                 | "this"
 
-<era>       ::= "bc"
-            | "ad"
-            | "bce" 
-            | "ce"
+<numdaymod>      ::= <optdet> <ord> "day" "of"
 
-<month>     ::= "january"
-            | "february"
-            | "march"
-            | "april"
-            | "may"
-            | "june"
-            | "july"
-            | "august"
-            | "september" 
-            | "october"
-            | "november"
-            | "december"
+<year>           ::= <int> 
+                 | <int> <era>
+                 | <var>
 
-<day>       ::= "monday"
-            | "tuesday"
-            | "wednesday"
-            | "thursday"
-            | "friday"
-            | "saturday"
-            | "sunday"
+<era>            ::= "bc"
+                 | "ad"
+                 | "bce" 
+                 | "ce"
 
-<ord>       ::= <int>"st"
-            | <int>"nd"
-            | <int>"rd"
-            | <int>"th"
+<month>          ::= "january"
+                 | "february"
+                 | "march"
+                 | "april"
+                 | "may"
+                 | "june"
+                 | "july"
+                 | "august"
+                 | "september"
+                 | "october"
+                 | "november"
+                 | "december"
+                 | <var>
 
-<optdet>    ::= "the"
-            | ""
+<day>            ::= "monday"
+                 | "tuesday"
+                 | "wednesday"
+                 | "thursday"
+                 | "friday"
+                 | "saturday"
+                 | "sunday"
+                 | <var>
+
+<ord>            ::= <int>"st"
+                 | <int>"nd"
+                 | <int>"rd"
+                 | <int>"th"
+
+<optdet>         ::= "the"
+                 | ""
+
+<daynum>         ::= <int>
+
+<namedindefdate> ::= "Boxing Day" 
+                 | "Christmas Eve" 
+                 | "Groundhog Day"
+                 | "Halloween"
+                 | <var>
+
+<var>            ::= "{"<alphanum>"}"
