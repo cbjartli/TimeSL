@@ -29,22 +29,22 @@ class Parser {
     }
 
     parseDate() {
-        let astnode = {type: 'date', children: []};
-        let child;
+        let astnode;
         this.tokens.saveCursor();
-        if ((child = this.parseDate1()) || (child = this.parseDate2()))  {
-            this.tokens.discardCursor();
-            astnode.children.push(child);
+        if (
+            (astnode = this.parseDate1()) 
+            || (astnode = this.parseDate2())
+            || (astnode = this.parseDate3())
+            || (astnode = this.parseDate4())
+        ) {
             return astnode;
         }
-
-        this.tokens.rewindCursor();
         return null;
     }
 
     // <indefdate> <year>
     parseDate1() {
-        let astnode = {type: 'date1', children: []};
+        let astnode = {type: 'date', prod: 1, children: []};
         let child1, child2;
         this.tokens.saveCursor();
         if ((child1 = this.parseIndefdate()) 
@@ -60,7 +60,7 @@ class Parser {
 
     // <indefdate>
     parseDate2() {
-        let astnode = {type: 'date2', children: []};
+        let astnode = {type: 'date', prod: 2, children: []};
         let child;
         this.tokens.saveCursor();
         if (child = this.parseIndefdate()) {
@@ -72,22 +72,50 @@ class Parser {
         return null;
     }
 
-    parseIndefdate() {
-        let astnode = {type: 'indefdate', children: []};
-        let child;
+    // <seqmod> <indefdate>
+    parseDate3() {
+        let astnode = {type: 'date', prod: 3, children: []};
+        let child1, child2;
         this.tokens.saveCursor();
-        if (child = this.parseIndefdate1()) {
+        if ((child1 = this.parseIndefdate()) && (child2 = this.parseIndefdate())) {
             this.tokens.discardCursor();
-            astnode.children.push(child);
+            astnode.children.push(child1);
+            astnode.children.push(child2);
             return astnode;
         }
         this.tokens.rewindCursor();
         return null;
     }
 
+    // <int> <delta> <date>
+    parseDate4() {
+        let astnode = {type: 'date', prod: 4, children: []};
+        let child1, child2, child3;
+        this.tokens.saveCursor();
+        if ((child1 = this.parseInt()) 
+            && (child2 = this.parseDelta()) 
+            && (child3 = this.parseDate())) {
+            this.tokens.discardCursor();
+            astnode.children.push(child1);
+            astnode.children.push(child2);
+            astnode.children.push(child3);
+            return astnode;
+        }
+        this.tokens.rewindCursor();
+        return null;
+    }
+
+    parseIndefdate() {
+        let astnode;
+        if (astnode = this.parseIndefdate1()) {
+            return astnode;
+        }
+        return null;
+    }
+
     // <month> <daynum>
     parseIndefdate1() {
-        let astnode = {type: 'indefdate1', children: []};
+        let astnode = {type: 'indefdate', prod: 1, children: []};
         let child1, child2;
         this.tokens.saveCursor();
         if ((child1 = this.parseMonth())
@@ -152,23 +180,18 @@ class Parser {
     }
 
     parseYear() {
-        let astnode = {type: 'year', children: []};
-        let child;
-        this.tokens.saveCursor();
-        if ((child = this.parseYear1()) 
-            || (child = this.parseYear2()) 
-            || (child = this.parseYear3())) {
-            this.tokens.discardCursor();
-            astnode.children.push(child);
+        let astnode;
+        if ((astnode = this.parseYear1()) 
+            || (astnode = this.parseYear2()) 
+            || (astnode = this.parseYear3())) {
             return astnode;
         }
-        this.tokens.rewindCursor();
         return null;
     }
 
     // <int> 'bc' || <int> 'ac' || ...
     parseYear1() {
-        let astnode = {type: 'year1', children: []};
+        let astnode = {type: 'year', prod: 1, children: []};
         this.tokens.saveCursor();
         let token1 = this.tokens.next();
         let token2 = this.tokens.next();
@@ -187,7 +210,7 @@ class Parser {
 
     // <int>
     parseYear2() {
-        let astnode = {type: 'year2', children: []};
+        let astnode = {type: 'year', prod: 2, children: []};
         this.tokens.saveCursor();
         let token = this.tokens.next();
 
@@ -203,7 +226,7 @@ class Parser {
 
     // <var>
     parseYear3() {
-        let astnode = {type: 'year3', children: []};
+        let astnode = {type: 'year', prod: 3, children: []};
         let child;
         this.tokens.saveCursor();
         let token = this.tokens.next();
@@ -214,6 +237,56 @@ class Parser {
             return astnode;
         }
 
+        this.tokens.rewindCursor();
+        return null;
+    }
+
+    parseSeqmod() {
+        let astnode = {type: 'seqmod', children: []};
+        let child;
+        this.tokens.saveCursor();
+        let token = this.tokens.next();
+
+        if ((token.type == 'var') 
+            && ((token.val == 'next')  
+               || (token.val == 'last') 
+               || (token.val == 'this'))) {
+            this.tokens.discardCursor();
+            astnode.children.push(token);
+            return astnode;
+        }
+
+        this.tokens.rewindCursor();
+        return null;
+    }
+
+    parseDelta() {
+        let astnode = {type: 'delta', children: []};
+        this.tokens.saveCursor();
+        let token1 = this.tokens.next();
+        let token2 = this.tokens.next();
+
+        if ((token1.type == 'kw') 
+            && (token2.type == 'kw')
+            && (token1.val == 'day' || token1.val == 'days')
+            && (token2.val == 'before' || token2.val == 'after')) {
+            this.tokens.discardCursor();
+            astnode.children.push(token1);
+            astnode.children.push(token2);
+            return astnode;
+        }
+
+        this.tokens.rewindCursor();
+        return null;
+    }
+
+    parseInt() {
+        this.tokens.saveCursor();
+        let token = this.tokens.next();
+        if (token.type == 'int') {
+            this.tokens.discardCursor();
+            return token;
+        }
         this.tokens.rewindCursor();
         return null;
     }
