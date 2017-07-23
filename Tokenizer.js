@@ -55,17 +55,16 @@ class Tokenizer {
     }
 
     saveCursor() {
-        console.log(`saving: ${this._cursor}`)
         this._savedCursorPos.push(this._cursor);
     }
 
     rewindCursor() {
-        this._cursor = this._savedCursorPos.pop() || this._cursor;
-        console.log(`rewound to: ${this._cursor}`)
+        if (this._savedCursorPos.length > 0) {
+            this._cursor = this._savedCursorPos.pop();
+        }
     }
 
     discardCursor() {
-        console.log(`discarded`)
         this._savedCursorPos.pop();
     }
 }
