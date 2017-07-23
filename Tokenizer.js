@@ -7,7 +7,7 @@ class Tokenizer {
         this._tokens = Tokenizer.tokenize(input);
         this._cursor = 0;
         this._savedCursorPos = [];
-        this.eof = { type: 'eof', val: 'eof' };
+        this._eof = { type: 'eof', val: 'eof' };
     }
 
     static tokenize(input) {
@@ -43,11 +43,11 @@ class Tokenizer {
 
     peek(n) {
         n = n || 0;
-        return this._tokens[this._cursor + n] || this.eof;
+        return this._tokens[this._cursor + n] || this._eof;
     }
 
     next() {
-        return this._cursor < this._tokens.length ? this._tokens[this._cursor++] : this.eof;
+        return this._cursor < this._tokens.length ? this._tokens[this._cursor++] : this._eof;
     }
 
     eof() {
@@ -55,14 +55,17 @@ class Tokenizer {
     }
 
     saveCursor() {
+        console.log(`saving: ${this._cursor}`)
         this._savedCursorPos.push(this._cursor);
     }
 
     rewindCursor() {
         this._cursor = this._savedCursorPos.pop() || this._cursor;
+        console.log(`rewound to: ${this._cursor}`)
     }
 
     discardCursor() {
+        console.log(`discarded`)
         this._savedCursorPos.pop();
     }
 }
