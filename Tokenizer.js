@@ -6,6 +6,7 @@ class Tokenizer {
     constructor(input) {
         this._tokens = Tokenizer.tokenize(input);
         this._cursor = 0;
+        this._savedCursorPos = [];
         this.eof = { type: 'eof', val: 'eof' };
     }
 
@@ -51,6 +52,18 @@ class Tokenizer {
 
     eof() {
         return this._cursor == this._tokens.length;
+    }
+
+    saveCursor() {
+        this._savedCursorPos.push(this._cursor);
+    }
+
+    rewindCursor() {
+        this._cursor = this._savedCursorPos.pop() || this._cursor;
+    }
+
+    discardCursor() {
+        this._savedCursorPos.pop();
     }
 }
 
