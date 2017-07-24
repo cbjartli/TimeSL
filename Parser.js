@@ -153,15 +153,8 @@ class Parser {
         return null;
     }
 
-    parseIndefdate() {
-        let astnode = 
-            this.parseIndefdate1();
-
-        return astnode;
-    }
-    
-    // <namedindefdate> <year>
-    parseDate7() {
+    // <numdaymod> <year>
+    parseDate8() {
         let astnode = {type: 'date', prod: 8, children: []};
         this.tokens.saveCursor();
 
