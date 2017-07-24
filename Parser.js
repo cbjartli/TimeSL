@@ -35,9 +35,7 @@ class Parser {
             || this.parseDate3()
             || this.parseDate4()
             || this.parseDate5()
-            || this.parseDate6()
-            || this.parseDate7()
-            || this.parseDate8();
+            || this.parseDate6();
 
         return astnode;
     }
@@ -115,47 +113,9 @@ class Parser {
         return null;
     }
 
-    // <namedindefdate> <year>
+    // <numdaymod> <year>
     parseDate6() {
         let astnode = {type: 'date', prod: 6, children: []};
-        this.tokens.saveCursor();
-
-        let child1, child2;
-        let parse = 
-               (child1 = this.parseNamedindefdate())
-            && (child2 = this.parseYear())
-            
-        if (parse) {
-            this.tokens.discardCursor();
-            astnode.children.push(child1, child2);
-            return astnode;
-        }
-
-        this.tokens.rewindCursor();
-        return null;
-    }
-
-    // <namedindefdate>
-    parseDate7() {
-        let astnode = {type: 'date', prod: 7, children: []};
-        this.tokens.saveCursor();
-
-        let child;
-        let parse = (child = this.parseNamedindefdate())
-            
-        if (parse) {
-            this.tokens.discardCursor();
-            astnode.children.push(child);
-            return astnode;
-        }
-
-        this.tokens.rewindCursor();
-        return null;
-    }
-
-    // <numdaymod> <year>
-    parseDate8() {
-        let astnode = {type: 'date', prod: 8, children: []};
         this.tokens.saveCursor();
 
         let child1, child2;
@@ -175,7 +135,8 @@ class Parser {
 
     parseIndefdate() {
         let astnode = 
-            this.parseIndefdate1();
+               this.parseIndefdate1()
+            || this.parseIndefdate2();
 
         return astnode;
     }
@@ -191,6 +152,24 @@ class Parser {
             astnode.children.push(child1, child2);
             return astnode;
         }
+        this.tokens.rewindCursor();
+        return null;
+    }
+    
+    // <namedindefdate>
+    parseIndefdate2() {
+        let astnode = {type: 'indefdate', prod: 2, children: []};
+        this.tokens.saveCursor();
+
+        let child;
+        let parse = (child = this.parseNamedindefdate())
+            
+        if (parse) {
+            this.tokens.discardCursor();
+            astnode.children.push(child);
+            return astnode;
+        }
+
         this.tokens.rewindCursor();
         return null;
     }
