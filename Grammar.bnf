@@ -5,8 +5,6 @@
                  | <seqmod> <indefdate>
                  | <int> <delta> <date>
                  | <nameddate>
-                 | <namedindefdate> <year> 
-                 | <namedindefdate>
                  | <numdaymod> <year>
 
 <indefdate>      ::= <month> <daynum>
