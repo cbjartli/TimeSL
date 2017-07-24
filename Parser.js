@@ -249,8 +249,7 @@ class Parser {
         let token1 = this.tokens.next();
         let token2 = this.tokens.next();
 
-        if (token1.type == 'int' && token2.type == 'kw' && 
-            (token2.val == 'bc' || token2.val == 'ad' || token2.val == 'bce' || token2.val == 'ce')) {
+        if (token1.type == 'int' && token2.type == 'era') {
             this.tokens.discardCursor();
             astnode.children.push(token1, token2);
             return astnode;
