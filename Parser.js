@@ -136,7 +136,8 @@ class Parser {
     parseIndefdate() {
         let astnode = 
                this.parseIndefdate1()
-            || this.parseIndefdate2();
+            || this.parseIndefdate2()
+            || this.parseIndefdate3();
 
         return astnode;
     }
@@ -167,6 +168,26 @@ class Parser {
         if (parse) {
             this.tokens.discardCursor();
             astnode.children.push(child);
+            return astnode;
+        }
+
+        this.tokens.rewindCursor();
+        return null;
+    }
+
+    // <namedindefdate>
+    parseIndefdate3() {
+        let astnode = {type: 'indefdate', prod: 3, children: []};
+        this.tokens.saveCursor();
+
+        let child1, child2;
+        let parse = 
+               (child1 = this.parseNumdaymod())
+            && (child2 = this.parseMonth())
+            
+        if (parse) {
+            this.tokens.discardCursor();
+            astnode.children.push(child1, child2);
             return astnode;
         }
 
