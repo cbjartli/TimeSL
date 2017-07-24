@@ -1,11 +1,12 @@
 <expr>           ::= <date>
 
-<date>           ::= <indefdate>
-                 | <indefdate> <year>
+<date>           ::= <indefdate> <year>
+                 | <indefdate>
                  | <seqmod> <indefdate>
-                 | <int> <delta> "before" <date>
-                 | <int>< <delta> "after" <date>
+                 | <int> <delta> <date>
                  | <nameddate>
+                 | <namedindefdate> <year> 
+                 | <namedindefdate>
                  | <numdaymod> <year>
 
 <indefdate>      ::= <month> <daynum>
@@ -68,5 +69,8 @@
                  | "Groundhog Day"
                  | "Halloween"
                  | <var>
+
+<nameddate>      ::= "Battle of Hastings"
+                 | "D-Day"
 
 <var>            ::= "{"<alphanum>"}"
