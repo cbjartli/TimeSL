@@ -21,7 +21,7 @@ class Tokenizer {
     
             if (word in lookupset) {
                 if ("$val" in lookupset[word]) {
-                    tokens.push({type: 'kw', val: lookupset[word].$val});
+                    tokens.push({type: lookupset[word].$type || 'kw', val: lookupset[word].$val});
                     lookupset = keywords;
                 } else {
                     lookupset = lookupset[word];
